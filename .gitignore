@@ -1,0 +1,4 @@
+.dev/
+.vscode/
+build/
+node_modules/
