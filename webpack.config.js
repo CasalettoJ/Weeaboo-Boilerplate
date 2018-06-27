@@ -9,7 +9,7 @@ const paths = {
 
 const webpackConfig = {
     mode: "development",
-    entry: ["babel-polyfill", path.resolve(paths.src, "app.js")],
+    entry: ["babel-polyfill", path.resolve(paths.src, "App.jsx")],
     output: {
         path: paths.build,
         filename: "bundle.js"
@@ -25,7 +25,9 @@ const webpackConfig = {
     },
     plugins: [
         //https://github.com/jantimon/html-webpack-plugin#options --See for config.
-        new HtmlWebpackPlugin()
+        new HtmlWebpackPlugin({
+            template: path.join(paths.src, "index.html")
+        })
     ],
     resolve: {
         extensions: [".js", ".jsx"]

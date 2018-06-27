@@ -11,7 +11,7 @@ The following guide will walk through creating the boilerplate project from an e
 -   What the hell webpack is even doing how do you set that guy up
 -   How to set up a basic "atomic design" pattern for the app
 -   Using Storybook to easily develop and test changes to atomic UI components visually
--   Creating a basic web app with React, Redux, and React-Router, using Styled Components for styling and Axios for rest calls.
+-   Creating a basic web app with React, Redux, and React-Router, using Styled Components for styling and Axios for rest calls. And Animejs for juice.
 -   Using scripts to build, bundle, and serve the app in a test environment
 -   How to ignore this entire README and just clone the repo to make websites because who cares
 
@@ -40,6 +40,7 @@ This guide will follow a step-by-step pace for setting up the project, based on 
 -   `babel-core` -- Babel transpiles ES2015+ to another target (ES5)
 -   `babel-loader` -- Loader used for webpack integration of babel
 -   `babel-runtime` -- Required for storybook
+-   `babel-eslint` -- Parser for eslint to handle flowtyping correctly (default parser does not handle typing syntax)
 -   `babel-preset-env` -- Preset containing syntax transpiling for ES2015+
 -   `babel-preset-react` -- Preset containing React/Flow transpiling
 -   `babel-polyfill` (**NOT a devDependency**) -- Polyfill for modern JS functions (like Object.assign)
@@ -58,6 +59,7 @@ This guide will follow a step-by-step pace for setting up the project, based on 
 -   `eslint-config-airbnb` -- Airbnb's popular eslint rules\*
     -   Requires Dependencies: https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb
 -   `prettier` -- Code Formatter
+-   `eslint-plugin-flowtype` -- For eslint to lint flowtyping correctly
 -   `eslint-plugin-prettier` -- https://prettier.io/docs/en/eslint.html For prettier + eslint combination
 -   `eslint-config-prettier` -- https://prettier.io/docs/en/eslint.html For prettier + eslint combination
 -   `flow-bin` -- https://flow.org/en/docs/install/ static typing for JS
@@ -104,7 +106,7 @@ This guide will follow a step-by-step pace for setting up the project, based on 
 Add all dev-dependencies (sans eslint packages)
 
 ```
-$ yarn add --dev webpack webpack-dev-server html-webpack-plugin file-loader babel-core babel-loader babel-preset-env babel-preset-react @storybook/react @storybook/addons @storybook/addon-knobs eslint eslint-loader prettier eslint-plugin-prettier eslint-config-prettier flow-bin
+$ yarn add --dev webpack webpack-dev-server html-webpack-plugin file-loader babel-core babel-loader babel-preset-env babel-preset-react babel-eslint @storybook/react @storybook/addons @storybook/addon-knobs eslint eslint-loader prettier eslint-plugin-flowtype eslint-plugin-prettier eslint-config-prettier flow-bin
 ```
 
 Determine dependencies for eslint-config-airbnb and add packages
@@ -129,44 +131,51 @@ Afterward `package.json` should look something like this:
 
 ```
 {
-  "name": "boilerplate",
-  "scripts": {},
-  "devDependencies": {
-    "@storybook/addon-knobs": "^3.4.8",
-    "@storybook/addons": "^3.4.8",
-    "@storybook/react": "^3.4.8",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-runtime": "^6.26.0",
-    "eslint": "4.19.1",
-    "eslint-config-airbnb": "17.0.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-import": "2.12.0",
-    "eslint-plugin-jsx-a11y": "6.0.3",
-    "eslint-plugin-prettier": "^2.6.1",
-    "eslint-plugin-react": "7.9.1",
-    "file-loader": "^1.1.11",
-    "flow-bin": "^0.75.0",
-    "html-webpack-plugin": "^3.2.0",
-    "prettier": "^1.13.5",
-    "webpack": "^4.12.1",
-    "webpack-dev-server": "^3.1.4"
-  },
-  "dependencies": {
-    "animejs": "^2.2.0",
-    "axios": "^0.18.0",
-    "babel-polyfill": "^6.26.0",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-redux": "^5.0.7",
-    "react-router-dom": "^4.3.1",
-    "redux": "^4.0.0",
-    "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0",
-    "styled-components": "^3.3.3"
-  }
+    "name": "boilerplate",
+    "scripts": {
+        "start-dev": "webpack-dev-server",
+        "build": "webpack"
+    },
+    "devDependencies": {
+        "@storybook/addon-knobs": "^3.4.8",
+        "@storybook/addons": "^3.4.8",
+        "@storybook/react": "^3.4.8",
+        "babel-core": "^6.26.3",
+        "babel-eslint": "^8.2.5",
+        "babel-loader": "^7.1.4",
+        "babel-preset-env": "^1.7.0",
+        "babel-preset-react": "^6.24.1",
+        "babel-runtime": "^6.26.0",
+        "eslint": "4.19.1",
+        "eslint-config-airbnb": "17.0.0",
+        "eslint-config-prettier": "^2.9.0",
+        "eslint-loader": "^2.0.0",
+        "eslint-plugin-flowtype": "^2.49.3",
+        "eslint-plugin-import": "^2.13.0",
+        "eslint-plugin-jsx-a11y": "^6.0.3",
+        "eslint-plugin-prettier": "^2.6.1",
+        "eslint-plugin-react": "^7.9.1",
+        "file-loader": "^1.1.11",
+        "flow-bin": "^0.75.0",
+        "html-webpack-plugin": "^3.2.0",
+        "prettier": "^1.13.5",
+        "webpack": "^4.12.1",
+        "webpack-cli": "^3.0.8",
+        "webpack-dev-server": "^3.1.4"
+    },
+    "dependencies": {
+        "animejs": "^2.2.0",
+        "axios": "^0.18.0",
+        "babel-polyfill": "^6.26.0",
+        "react": "^16.4.1",
+        "react-dom": "^16.4.1",
+        "react-redux": "^5.0.7",
+        "react-router-dom": "^4.3.1",
+        "redux": "^4.0.0",
+        "redux-logger": "^3.0.6",
+        "redux-thunk": "^2.3.0",
+        "styled-components": "^3.3.3"
+    }
 }
 ```
 
@@ -197,7 +206,7 @@ const webpackConfig = {
     mode: "development",
 
     // https://babeljs.io/docs/en/babel-polyfill
-    entry: ["babel-polyfill", path.resolve(paths.src, "app.js")],
+    entry: ["babel-polyfill", path.resolve(paths.src, "App.js")],
     output: {
         path: paths.build,
         filename: "bundle.js"
@@ -230,7 +239,7 @@ module.exports = webpackConfig;
 This webpack configuration file will do a few things when `webpack` is run:
 
 -   Sets the mode to "development" for webpack's internal configuration magic (see comment for more info on modes)
--   Use the files "babel-polyfill" and "/src/app.js" as code entrypoints for bundling
+-   Use the files `babel-polyfill` and `src/App.js` as code entrypoints for bundling
 -   When bundling, it will follow these rules in this order:
 
     -   First it will run all js / jsx files through eslint (with rules from `.eslintrc` set up later -- including `prettier` and `flow` integration.)
@@ -280,13 +289,22 @@ Add this to the file:
 ```json
 {
     "extends": ["airbnb", "prettier"],
-    "plugins": ["prettier"],
+    "plugins": ["prettier", "flowtype"],
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true
+    },
     "rules": {
-        "prettier/prettier": "error"
+        "no-console": "off",
+        "prettier/prettier": "off",
+        "react/jsx-indent": "off",
+        "react/jsx-one-expression-per-line": "off"
     }
 }
 ```
 
+`env` with browser set to true ensures that global browser variables (document, window, ...) are available to the linter.
+The parser is required to handle flowtyping syntax in eslint. Otherwise you'll get complaints about `:` etc. `flowtype` is handled as a plugin here.
 Anything that says `prettier` is used to integrate prettier with eslint via plugin so that eslint doesn't complain about prettier rule inconsistencies while linting. It uses the `eslint-*-prettier` dependencies added earlier (https://prettier.io/docs/en/eslint.html). `"airbnb"` enables the `eslint-config-airbnb` dependency added as a basic style guide.
 
 It may have some rules you disagree with when you edit. You can edit it later to add a 'rules' object to change individual rules:
@@ -367,7 +385,7 @@ yarn.lock
 Add the entrypoint specified in the `webpack.config.js` file:
 
 ```
-$ mkdir src && touch src/app.js
+$ mkdir src && touch src/App.js
 ```
 
 Add some very basic ES2016 code to the file:
@@ -434,8 +452,8 @@ Built at: 2018-06-25 21:40:37
  bundle.js    461 KiB    main  [emitted]  main
 index.html  182 bytes          [emitted]
 [./node_modules/webpack/buildin/global.js] (webpack)/buildin/global.js 489 bytes {main} [built]
-[./src/app.js] 405 bytes {main} [built]
-[0] multi babel-polyfill ./src/app.js 40 bytes {main} [built]
+[./src/App.js] 405 bytes {main} [built]
+[0] multi babel-polyfill ./src/App.js 40 bytes {main} [built]
     + 326 hidden modules
 Child html-webpack-plugin for "index.html":
      1 asset
@@ -471,6 +489,7 @@ The list of depdendencies now looks like this:
 -   ~~babel-runtime~~
 -   ~~babel-preset-env~~
 -   ~~babel-preset-react~~
+-   ~~babel-eslint~~
 -   ~~babel-polyfill~~
 -   `@storybook/react`
 -   `@storybook/addons`
@@ -479,6 +498,7 @@ The list of depdendencies now looks like this:
 -   ~~eslint-loader~~
 -   ~~eslint-config-airbnb~~
 -   ~~prettier~~
+-   ~~eslint-plugin-flowtype~~
 -   ~~eslint-plugin-prettier~~
 -   ~~eslint-config-prettier~~
 -   ~~flow-bin~~
@@ -495,4 +515,128 @@ The list of depdendencies now looks like this:
 
 # <a name="2"></a> Milestone 2: Basic React and Redux
 
-// TODO
+## Setting up React
+
+Delete `src/App.js` and create `src/App.jsx` in its place, then add this to the file:
+
+```javascript
+// @flow
+
+// https://babeljs.io/docs/en/babel-polyfill
+// Make sure polyfill is imported before any other code at entrypoint.
+import "babel-polyfill";
+
+import React from "react";
+import ReactDOM from "react-dom";
+
+type Props = {
+    message: string
+};
+
+function App(props: Props) {
+    const { message }: { message: string } = props;
+    return <div>{message}</div>;
+}
+
+// "document" can technically be null and so flow gives an error to getElementById()'s call.
+// $FlowFixMe
+ReactDOM.render(<App message="Hello, World" />, document.getElementById("app"));
+```
+
+add a new file titled `index.html` that will serve as a base template:
+
+```
+$ touch src/index.html
+```
+
+Add this basic HTML to the file:
+
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Boilerplate</title>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+</body>
+
+</html>
+```
+
+`HtmlWebpackPlugin` can be configured to use this template instead of creating one from scratch. It has the `<div id="app">` element that ReactDOM renders the <App /> React element to -- the base of the React app.
+
+Open `webpack.config.js` and update it to include the following:
+
+```js
+/* eslint-disable */
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const paths = {
+    build: path.resolve(__dirname, "build"),
+    src: path.resolve(__dirname, "src")
+};
+
+const webpackConfig = {
+    mode: "development",
+    entry: ["babel-polyfill", path.resolve(paths.src, "App.jsx")],
+    output: {
+        path: paths.build,
+        filename: "bundle.js"
+    },
+    module: {
+        rules: [
+            { test: /\.(js|jsx)$/, exclude: /node_modules/, loader: "babel-loader" },
+            // https://github.com/webpack-contrib/file-loader --See for config
+            { test: /\.(png|jpg|gif|ttf|otf|svg)$/, loader: "file-loader" },
+            // https://www.npmjs.com/package/eslint-loader --See "Usage"
+            { test: /\.(js|jsx)$/, exclude: /node_modules/, loader: "eslint-loader" }
+        ]
+    },
+    plugins: [
+        //https://github.com/jantimon/html-webpack-plugin#options --See for config.
+        new HtmlWebpackPlugin({
+            template: path.join(paths.src, "index.html")
+        })
+    ],
+    resolve: {
+        extensions: [".js", ".jsx"]
+    }
+};
+
+module.exports = webpackConfig;
+```
+
+The `HtmlWebpackPlugin` creation has been updated to use the `src/index.html` file.
+
+Run the build command and serve the test file:
+
+```
+$ yarn build && yarn start-dev
+```
+
+You shouldn't see any errors, just lots of green success messages. Feels good, man.
+Open up a browser and go to `localhost:8080` and you'll see the React App's "Hello World" message showing on-screen.
+
+Now the following dependencies have been implemented:
+
+-   `@storybook/react`
+-   `@storybook/addons`
+-   `@storybook/addon-knobs`
+-   ~~react~~
+-   ~~react-dom~~
+-   `react-router-dom`
+-   `redux`
+-   `react-redux`
+-   `redux-thunk`
+-   `redux-logger`
+-   `animejs`
+-   `styled-components`
+-   `axios`
+
+## Setting up Redux
