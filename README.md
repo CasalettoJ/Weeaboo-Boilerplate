@@ -97,7 +97,7 @@ This guide will follow a step-by-step pace for setting up the project, based on 
 
 -   [Milestone 1: Configuring a build system and Linting / IDE Extensions](#1)
 
--   [Milestone 2: Basic React and Redux](#1)
+-   [Milestone 2: Basic React and Redux](#2)
 
 # <a name="0" ></a> Milestone 0: Adding dependencies
 
@@ -299,6 +299,12 @@ It may have some rules you disagree with when you edit. You can edit it later to
 
 Finally, install the `ESLint` extension for VSCode. It uses the .eslintrc file as a configuration file to integrate with VSCode's UI.
 
+You'll also want to make sure eslint doesn't lint your build folder. Create a `.eslintignore` file and add the following:
+
+```
+build/*
+```
+
 **Flow**
 
 Add the Flow config file at root
@@ -347,6 +353,7 @@ That's it! The directory should look like this right now:
 ..
 node_modules
 .babelrc
+.eslintignore
 .eslintrc
 .flowconfig
 .prettierrc
