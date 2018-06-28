@@ -99,7 +99,13 @@ This guide will follow a step-by-step pace for setting up the project, based on 
 
 -   [Milestone 1: Configuring a build system and Linting / IDE Extensions](#1)
 
--   [Milestone 2: Basic React and Redux](#2)
+-   [Milestone 2: React. Routing. Redux.](#2)
+
+-   [Milestone 3: Styled Components and Storybook.](#3)
+
+-   [Milestone 4: Optimizations](#4)
+
+-   [Further Reading](#5)
 
 # <a name="0" ></a> Milestone 0: Adding dependencies
 
@@ -513,7 +519,7 @@ The list of depdendencies now looks like this:
 -   `styled-components`
 -   `axios`
 
-# <a name="2"></a> Milestone 2: Basic React and Redux
+# <a name="2"></a> Milestone 2: React, Routing, Redux.
 
 ## Setting up React
 
@@ -639,4 +645,34 @@ Now the following dependencies have been implemented:
 -   `styled-components`
 -   `axios`
 
+##
+
+Before I set up
+
 ## Setting up Redux
+
+Not going to explain a ton about what Redux is because you can just go read about it if you don't know, just going to set it up here. It's basically a global immutable state for the app. How redux is implemented is subject to personal opinion to some extent, but for this boilerplate I'm going to try and use redux for all state in the app, leaving most if not all React components as functional components with locally scoped redux store state data. If you don't like the approach, try something else I'm not your mom I'm not in charge of you.
+
+---
+
+// Further Reading
+
+https://github.com/webpack/webpack/issues/5718 airbnb webpack optimizations
+
+http://bradfrost.com/blog/post/atomic-web-design/ Atomic web design
+
+https://philipwalton.github.io/solved-by-flexbox/demos/holy-grail/ Solved by Flexbox - flexbox solutions to layout problems
+
+https://developers.redhat.com/blog/2017/11/15/best-practices-react-redux-web-application-development/ Suggestions for redux best practices
+
+https://www.thegreatcodeadventure.com/building-a-simple-crud-app-with-react-redux-part-1/ - What it says
+
+https://github.com/markerikson/react-redux-links/blob/master/react-architecture.md - React Architecture best practices
+
+// Docs
+
+https://github.com/juliangarnier/anime AnimeJs Docs
+
+https://redux.js.org/basics Redux docs
+
+https://www.styled-components.com/docs/basics#installation Styled Components docs
