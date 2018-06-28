@@ -352,6 +352,18 @@ You can add this to make sure flow ignores any bundled files:
 
 Install the `Flow Language Support` VSCode Extension to integrate flow static typechecking into the IDE in real time.
 
+Next, you'll have to tell the IDE Extension to use the flow bin from node_modules. Add this to the VSCode `User Settings`:
+
+```json
+"flow.useNPMPackagedFlow": true
+```
+
+you'll also need to install flow-bin globally unfortunately:
+
+```
+npm install -g flow-bin
+```
+
 **Prettier**
 
 Prettier is best used when integrated with the IDE, so install `Prettier - Code Formatter` for VS Code. However, there is a prettier CLI that you can use instead if you want.
@@ -426,7 +438,7 @@ Instead of manually running webpack all the time, open `package.json` and add th
 
   "scripts": {
     "start-dev": "webpack-dev-server",
-    "build": "webpack"
+    "build": "flow check && webpack"
   },
 ...
 ```
@@ -437,6 +449,7 @@ Run the following command:
 $ yarn build
 ```
 
+This script will check for flow errors, and if there are none it will run webpack to bundle.
 if you get the following warning about needing a webpack-cli, that's because I have a webpack cli installed globally but you might not. If you see this:
 
 ```
@@ -861,8 +874,8 @@ import Home from "Templates/Home";
 import Away from "Templates/Away";
 
 function App() {
-    const HomeComponent = () => <Home message="I'm Home." />;
-    const AwayComponent = () => <Away message="I'm away." />;
+    const HomeComponent = () => <Home message="I'm home!" />;
+    const AwayComponent = () => <Away message="I'm away!" />;
     return (
         <BrowserRouter>
             <Switch>
@@ -873,9 +886,9 @@ function App() {
     );
 }
 
-// "document" can technically be null and so flow gives an error to getElementById()'s call.
-// $FlowFixMe
-ReactDOM.render(<App />, document.getElementById("app"));
+// This is an example of type casting with flow: https://flow.org/en/docs/types/casting/
+// Prettier and flow typecasting do not work well together; prettier is too opinionated on parens.
+/* prettier-ignore */ ReactDOM.render(<App />, ((document): any).getElementById("app"));
 ```
 
 One last thing to edit in `webpack.config.js`:
@@ -902,7 +915,7 @@ $ yarn build && yarn start-dev
 
 Open a browser to `localhost:8080` and you'll see the message `I'm home!` with a link to go to `Away`. Click it and you can navigate back and forth.
 
-That's it! That's react-router! ...ish. See further reading.
+That's it! That's react-router! ...ish. See further reading to learn how to use it.
 
 ## Setting up Redux
 
@@ -924,6 +937,8 @@ Not going to explain a ton about what Redux is because you can just go read abou
 
 -   https://github.com/markerikson/react-redux-links/blob/master/react-architecture.md - React Architecture best practices
 
+-   https://blog.iansinnott.com/getting-started-with-flow-and-webpack/
+
 **Docs**
 
 -   https://github.com/juliangarnier/anime AnimeJs Docs
@@ -937,3 +952,5 @@ Not going to explain a ton about what Redux is because you can just go read abou
 -   https://github.com/flowtype/flow-typed How to use flow-typed to set up flow typings for third party libraries.
 
 -   https://reacttraining.com/react-router Deep dive into react-router
+
+-   https://www.npmjs.com/package/eslint-plugin-flowtype#eslint-plugin-flowtype-configuration flowtype eslint plugin configuration details

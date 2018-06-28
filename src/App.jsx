@@ -14,8 +14,8 @@ import Home from "Templates/Home";
 import Away from "Templates/Away";
 
 function App() {
-    const HomeComponent = () => <Home message="I'm Home." />;
-    const AwayComponent = () => <Away message="I'm away." />;
+    const HomeComponent = () => <Home message="I'm away!" />;
+    const AwayComponent = () => <Away message="I'm away!" />;
     return (
         <BrowserRouter>
             <Switch>
@@ -26,6 +26,6 @@ function App() {
     );
 }
 
-// "document" can technically be null and so flow gives an error to getElementById()'s call.
-// $FlowFixMe
-ReactDOM.render(<App />, document.getElementById("app"));
+// This is an example of type casting with flow: https://flow.org/en/docs/types/casting/
+// Prettier and flow typecasting do not work well together; prettier is too opinionated on parens.
+/* prettier-ignore */ ReactDOM.render(<App />, ((document): any).getElementById("app"));

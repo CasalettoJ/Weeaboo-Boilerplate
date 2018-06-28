@@ -25,7 +25,7 @@ const webpackConfig = {
         ]
     },
     plugins: [
-        //https://github.com/jantimon/html-webpack-plugin#options --See for config.
+        // https://github.com/jantimon/html-webpack-plugin#options -- See for config.
         new HtmlWebpackPlugin({
             template: path.join(paths.src, "index.html")
         })
