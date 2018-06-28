@@ -37,6 +37,7 @@ const webpackConfig = {
     },
     resolve: {
         alias: {
+            Base: paths.src,
             Atoms: path.resolve(paths.components, "atoms/"),
             Molecules: path.resolve(paths.components, "molecules/"),
             Organisms: path.resolve(paths.components, "organisms/"),

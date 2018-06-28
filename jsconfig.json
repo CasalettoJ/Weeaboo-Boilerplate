@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "jsx": "react",
+        "module": "commonjs",
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "paths": {
+            "Base/*": ["./src/*"],
+            "Atoms/*": ["./src/components/atoms/*"],
+            "Molecules/*": ["./src/components/molecules/*"],
+            "Organisms/*": ["./src/components/organisms/*"],
+            "Templates/*": ["./src/components/templates/*"]
+        }
+    },
+
+    "exclude": ["node_modules", "build", ".vscode"]
+}

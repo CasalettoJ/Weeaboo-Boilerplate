@@ -739,6 +739,7 @@ const paths = {
 
 resolve: {
     alias: {
+        Base: paths.src,
         Atoms: path.resolve(paths.components, "atoms/"),
         Molecules: path.resolve(paths.components, "molecules/"),
         Organisms: path.resolve(paths.components, "organisms/"),
@@ -748,7 +749,7 @@ resolve: {
 }
 ```
 
-This will set up an alias for each component path. Now you can import `Away` like this:
+This will set up an alias for each component path and one for the root `src` folder (useful for importing base level files like constants, configs, etc). Now you can import `Away` like this:
 
 ```javascript
 import Away from "Templates/Away";
@@ -789,15 +790,51 @@ Finally, open `.flowconfig` and replace the contents with this:
 ./build/.*
 
 [options]
+module.name_mapper='^Base\(\/?.*\)$' -> '<PROJECT_ROOT>/src/\1'
 module.name_mapper='^Atoms\(\/?.*\)$' -> '<PROJECT_ROOT>/src/components/atoms/\1'
 module.name_mapper='^Molecules\(\/?.*\)$' -> '<PROJECT_ROOT>/src/components/molecules/\1'
 module.name_mapper='^Organisms\(\/?.*\)$' -> '<PROJECT_ROOT>/src/components/organisms/\1'
 module.name_mapper='^Templates\(\/?.*\)$' -> '<PROJECT_ROOT>/src/components/templates/\1'
 ```
 
-It looks like a hot mess, I know. But it's not that complicated: `module.name_mapper=` sets a regular expression string to an alias of another string -- in this case, these four options lines are mirroring what was added in `webpack.config.js`.
+It looks like a hot mess, I know. But it's not that complicated: `module.name_mapper=` sets a regular expression string to an alias of another string -- in this case, these five options lines are mirroring what was added in `webpack.config.js`.
 
-Whenever you want to create a new alias (for example, when we add `API`s or `Assets`), you will have to add it in **both** webpack _and_ flowconfig. Yeah it's kind of a pain in the ass, but it's still so much better than not setting up aliasing.
+**Enabling correct intellisense and click-through in VSCode**
+
+Once imports have been aliased, you'll need to add a `jsconfig.json` file at the root of the project folder:
+
+```
+$ touch jsconfig.json
+```
+
+Then, add this to the json file:
+
+```json
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "jsx": "react",
+        "module": "commonjs",
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "paths": {
+            "Base/*": ["./src/*"],
+            "Atoms/*": ["./src/components/atoms/*"],
+            "Molecules/*": ["./src/components/molecules/*"],
+            "Organisms/*": ["./src/components/organisms/*"],
+            "Templates/*": ["./src/components/templates/*"]
+        }
+    },
+
+    "exclude": ["node_modules", "build", ".vscode"]
+}
+```
+
+This will let the VSCode intellisense system work with the aliased imports to generate intellisense for props and click-through functionality for ctrl+clicking an import's name.
+
+**Every time you add a new alias, add it to the `webpack.config.js` alias list, the `.flowconfig` options list, and `jsconfig.json`'s paths.**
+
+Whenever you want to create a new alias (for example, when we add `API`s or `Assets`), you will have to add it in all three places to get the linting and intellisense to play nicely with your expected keyboard shortcuts. Yeah it's kind of a pain in the ass, but it's still so much better than not setting up aliasing. Just do it.
 
 And that's it for the project structure for now! If eslint/flow still give you any shit about imports, you might need to just restart your IDE.
 
@@ -904,8 +941,6 @@ One last thing to edit in `webpack.config.js`:
 ```
 
 Add this `devServer` object back in; the `historyApiFallback` will help `webpack-dev-server` set up initial routing correctly when the app loads from a refresh, hot-reload, etc.
-
-// TODO: flow will not check props and will not give errors when building if props are incorrect.
 
 After that's done, build and launch the site to test:
 
