@@ -830,11 +830,11 @@ Then, add this to the json file:
 }
 ```
 
-This will let the VSCode intellisense system work with the aliased imports to generate intellisense for props and click-through functionality for ctrl+clicking an import's name.
+This will let the VSCode intellisense system work with the aliased imports to generate intellisense for props and click-through functionality for ctrl+clicking an import's name. (Read more here https://code.visualstudio.com/docs/languages/jsconfig)
 
 **Every time you add a new alias, add it to the `webpack.config.js` alias list, the `.flowconfig` options list, and `jsconfig.json`'s paths.**
 
-Whenever you want to create a new alias (for example, when we add `API`s or `Assets`), you will have to add it in all three places to get the linting and intellisense to play nicely with your expected keyboard shortcuts. Yeah it's kind of a pain in the ass, but it's still so much better than not setting up aliasing. Just do it.
+Whenever you want to create a new alias (e.g. `API` or `Assets`), you will have to add it in all three places to get the linting and intellisense to play nicely with your expected keyboard shortcuts. Yeah it's kind of a pain in the ass, but it's still so much better than not setting up aliasing. Just do it.
 
 And that's it for the project structure for now! If eslint/flow still give you any shit about imports, you might need to just restart your IDE.
 
@@ -974,6 +974,8 @@ Not going to explain a ton about what Redux is because you can just go read abou
 
 -   https://blog.iansinnott.com/getting-started-with-flow-and-webpack/
 
+-   https://medium.com/@justintulk/solve-module-import-aliasing-for-webpack-jest-and-vscode-74007ce4adc9
+
 **Docs**
 
 -   https://github.com/juliangarnier/anime AnimeJs Docs
@@ -989,3 +991,5 @@ Not going to explain a ton about what Redux is because you can just go read abou
 -   https://reacttraining.com/react-router Deep dive into react-router
 
 -   https://www.npmjs.com/package/eslint-plugin-flowtype#eslint-plugin-flowtype-configuration flowtype eslint plugin configuration details
+
+-   https://code.visualstudio.com/docs/languages/jsconfig jsconfig.json configuration opts
