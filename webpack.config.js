@@ -30,6 +30,11 @@ const webpackConfig = {
             template: path.join(paths.src, "index.html")
         })
     ],
+    devServer: {
+        contentBase: paths.build,
+        publicPath: "/",
+        historyApiFallback: true
+    },
     resolve: {
         alias: {
             Atoms: path.resolve(paths.components, "atoms/"),

@@ -786,9 +786,123 @@ It looks like a hot mess, I know. But it's not that complicated: `module.name_ma
 
 Whenever you want to create a new alias (for example, when we add `API`s or `Assets`), you will have to add it in **both** webpack _and_ flowconfig. Yeah it's kind of a pain in the ass, but it's still so much better than not setting up aliasing.
 
-And that's it for the project structure for now!
+And that's it for the project structure for now! If eslint/flow still give you any shit about imports, you might need to just restart your IDE.
 
 ## Back to React Router...
+
+Let's set up a basic route between two pages.
+
+Add this code to the `Away/index.jsx` file:
+
+```js
+// @flow
+import React from "react";
+import { Link } from "react-router-dom";
+
+type Props = {
+    message: string
+};
+
+function Away(props: Props) {
+    const { message }: { message: string } = props;
+    return (
+        <div>
+            {message}
+            <br />
+            <Link to="/">Go Home</Link>
+        </div>
+    );
+}
+
+export default Away;
+```
+
+Add something similar to `Home/index.jsx`:
+
+```js
+// @flow
+import React from "react";
+import { Link } from "react-router-dom";
+
+type Props = {
+    message: string
+};
+
+function Home(props: Props) {
+    const { message }: { message: string } = props;
+    return (
+        <div>
+            {message}
+            <br />
+            <Link to="/away">Go Away</Link>
+        </div>
+    );
+}
+
+export default Home;
+```
+
+Finally, edit `App.jsx` to serve as the top-level navigation component of `react-router-dom`, which will switch what is rendered on the page in real-time based on navigation from `Link` components in the library.
+
+```js
+// @flow
+
+// https://babeljs.io/docs/en/babel-polyfill
+// Make sure polyfill is imported before any other code at entrypoint.
+import "babel-polyfill";
+
+// node_modules
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+
+// Components
+import Home from "Templates/Home";
+import Away from "Templates/Away";
+
+function App() {
+    const HomeComponent = () => <Home message="I'm Home." />;
+    const AwayComponent = () => <Away message="I'm away." />;
+    return (
+        <BrowserRouter>
+            <Switch>
+                <Route exact path="/" component={HomeComponent} />
+                <Route path="/away" component={AwayComponent} />
+            </Switch>
+        </BrowserRouter>
+    );
+}
+
+// "document" can technically be null and so flow gives an error to getElementById()'s call.
+// $FlowFixMe
+ReactDOM.render(<App />, document.getElementById("app"));
+```
+
+One last thing to edit in `webpack.config.js`:
+
+```js
+    . . .
+    devServer: {
+        contentBase: paths.build,
+        publicPath: "/",
+        historyApiFallback: true
+    },
+    . . .
+```
+
+Add this `devServer` object back in; the `historyApiFallback` will help `webpack-dev-server` set up initial routing correctly when the app loads from a refresh, hot-reload, etc.
+
+// TODO: flow will not check props and will not give errors when building if props are incorrect.
+
+After that's done, build and launch the site to test:
+
+```
+$ yarn build && yarn start-dev
+```
+
+Open a browser to `localhost:8080` and you'll see the message `I'm home!` with a link to go to `Away`. Click it and you can navigate back and forth.
+
+That's it! That's react-router! ...ish. See further reading.
 
 ## Setting up Redux
 
@@ -821,3 +935,5 @@ Not going to explain a ton about what Redux is because you can just go read abou
 -   https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/guides/basic-components.md Basics of react router's browserrouter, etc.
 
 -   https://github.com/flowtype/flow-typed How to use flow-typed to set up flow typings for third party libraries.
+
+-   https://reacttraining.com/react-router Deep dive into react-router

@@ -7,20 +7,25 @@ import "babel-polyfill";
 // node_modules
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 // Components
-import Home from "templates/Home";
-import Away from "templates/Away";
+import Home from "Templates/Home";
+import Away from "Templates/Away";
 
-type Props = {
-    message: string
-};
-
-function App(props: Props) {
-    const { message }: { message: string } = props;
-    return <div>{message}</div>;
+function App() {
+    const HomeComponent = () => <Home message="I'm Home." />;
+    const AwayComponent = () => <Away message="I'm away." />;
+    return (
+        <BrowserRouter>
+            <Switch>
+                <Route exact path="/" component={HomeComponent} />
+                <Route path="/away" component={AwayComponent} />
+            </Switch>
+        </BrowserRouter>
+    );
 }
 
 // "document" can technically be null and so flow gives an error to getElementById()'s call.
 // $FlowFixMe
-ReactDOM.render(<App message="Hello, World" />, document.getElementById("app"));
+ReactDOM.render(<App />, document.getElementById("app"));
