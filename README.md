@@ -11,14 +11,14 @@ The following guide will walk through creating the boilerplate project from an e
 -   What the hell webpack is even doing how do you set that guy up
 -   How to set up a basic "atomic design" pattern for the app
 -   Using Storybook to easily develop and test changes to atomic UI components visually
--   Creating a basic web app with React, Redux, and React-Router, using Styled Components for styling and Axios for rest calls. And Animejs for juice.
+-   Creating a VERY basic web app with React, Redux, and React-Router, using Styled Components for styling and Axios for rest calls. And Animejs for juice.
 -   Using scripts to build, bundle, and serve the app in a test environment
 -   How to ignore this entire README and just clone the repo to make websites because who cares
 
 The Boilerplate project has the following uncovered topics as TO-DOs:
 
--   Authorization / Authentication
--   Testing
+-   Authorization / Authentication and protecting certain routes.
+-   Testing using `jest`
 -   `flow-typed` to get third party flow typings
 -   webpack build optimizations
 
@@ -102,11 +102,11 @@ This guide will follow a step-by-step pace for setting up the project, based on 
 
 -   [Milestone 1: Configuring a build system and Linting / IDE Extensions](#1)
 
--   [Milestone 2: React. Routing. Redux.](#2)
+-   [Milestone 2: React, Routing, Redux.](#2)
 
 -   [Milestone 3: Styled Components and Storybook](#3)
 
--   [Milestone 4: Optimizations](#4)
+-   [Milestone 4: Further Optimizations](#4)
 
 -   [Further Reading](#5)
 
@@ -712,11 +712,13 @@ With that done, a basic react-router setup using BrowserRouter can be added to A
 
 **TL;DR:** If it can be expressed in one or very few html tags it is likely an atom. If it cannot, it likely can be split up into multiple atoms. The example the write-up gives is this:
 
-Label, Button, Input: atoms
-Login form combining the three: molecule
-Header component with login form and links for nav: organism
-Page that displays all content including the header: template
-Page populated with data and rendered: page
+-   Label, Button, Input: atoms
+-   Login form combining the three: molecule
+-   Header component with login form and links for nav: organism
+-   Page that displays all content including the header: template
+-   Page populated with data and rendered with unique route: page
+
+It should be noted that there is a subtle difference between designing code around atomic design and creating design elements with an atomic design mindset. This guide is always working with the former context and is for developers, not visual designers. (I suck at design.)
 
 It'll make more sense when Redux is added and components need to be added to display the store data.
 
@@ -974,7 +976,9 @@ Not going to explain a ton about what Redux is because you can just go read abou
 
 -   https://blog.iansinnott.com/getting-started-with-flow-and-webpack/
 
--   https://medium.com/@justintulk/solve-module-import-aliasing-for-webpack-jest-and-vscode-74007ce4adc9
+-   https://medium.com/@justintulk/solve-module-import-aliasing-for-webpack-jest-and-vscode-74007ce4adc9 - integrating import aliasing with jest for proper testing
+
+-   https://blogs.perficient.com/perficientdigital/2018/06/18/atomic-design-a-visual-designers-perspective/
 
 **Docs**
 
