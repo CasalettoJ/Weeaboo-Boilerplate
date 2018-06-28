@@ -4,8 +4,13 @@
 // Make sure polyfill is imported before any other code at entrypoint.
 import "babel-polyfill";
 
+// node_modules
 import React from "react";
 import ReactDOM from "react-dom";
+
+// Components
+import Home from "templates/Home";
+import Away from "templates/Away";
 
 type Props = {
     message: string

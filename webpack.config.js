@@ -4,7 +4,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const paths = {
     build: path.resolve(__dirname, "build"),
-    src: path.resolve(__dirname, "src")
+    src: path.resolve(__dirname, "src"),
+    components: path.resolve(__dirname, "src/components")
 };
 
 const webpackConfig = {
@@ -30,6 +31,12 @@ const webpackConfig = {
         })
     ],
     resolve: {
+        alias: {
+            Atoms: path.resolve(paths.components, "atoms/"),
+            Molecules: path.resolve(paths.components, "molecules/"),
+            Organisms: path.resolve(paths.components, "organisms/"),
+            Templates: path.resolve(paths.components, "templates/")
+        },
         extensions: [".js", ".jsx"]
     }
 };

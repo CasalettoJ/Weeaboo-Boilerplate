@@ -19,6 +19,8 @@ The Boilerplate project has the following uncovered topics as TO-DOs:
 
 -   Authorization / Authentication
 -   Testing
+-   `flow-typed` to get third party flow typings
+-   webpack build optimizations
 
 I use yarn. You can use npm instead. It's the same crap who cares.
 
@@ -60,6 +62,7 @@ This guide will follow a step-by-step pace for setting up the project, based on 
     -   Requires Dependencies: https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb
 -   `prettier` -- Code Formatter
 -   `eslint-plugin-flowtype` -- For eslint to lint flowtyping correctly
+-   `eslint-import-resolver-webpack` -- Allows eslint to detect webpack aliasing import statements to avoid messy relative import paths
 -   `eslint-plugin-prettier` -- https://prettier.io/docs/en/eslint.html For prettier + eslint combination
 -   `eslint-config-prettier` -- https://prettier.io/docs/en/eslint.html For prettier + eslint combination
 -   `flow-bin` -- https://flow.org/en/docs/install/ static typing for JS
@@ -101,7 +104,7 @@ This guide will follow a step-by-step pace for setting up the project, based on 
 
 -   [Milestone 2: React. Routing. Redux.](#2)
 
--   [Milestone 3: Styled Components and Storybook.](#3)
+-   [Milestone 3: Styled Components and Storybook](#3)
 
 -   [Milestone 4: Optimizations](#4)
 
@@ -112,7 +115,7 @@ This guide will follow a step-by-step pace for setting up the project, based on 
 Add all dev-dependencies (sans eslint packages)
 
 ```
-$ yarn add --dev webpack webpack-dev-server html-webpack-plugin file-loader babel-core babel-loader babel-preset-env babel-preset-react babel-eslint @storybook/react @storybook/addons @storybook/addon-knobs eslint eslint-loader prettier eslint-plugin-flowtype eslint-plugin-prettier eslint-config-prettier flow-bin
+$ yarn add --dev webpack webpack-dev-server html-webpack-plugin file-loader babel-core babel-loader babel-preset-env babel-preset-react babel-eslint @storybook/react @storybook/addons @storybook/addon-knobs eslint eslint-loader prettier eslint-plugin-flowtype eslint-plugin-prettier eslint-config-prettier eslint-import-resolver-webpack flow-bin
 ```
 
 Determine dependencies for eslint-config-airbnb and add packages
@@ -155,6 +158,7 @@ Afterward `package.json` should look something like this:
         "eslint": "4.19.1",
         "eslint-config-airbnb": "17.0.0",
         "eslint-config-prettier": "^2.9.0",
+        "eslint-import-resolver-webpack": "^0.10.1",
         "eslint-loader": "^2.0.0",
         "eslint-plugin-flowtype": "^2.49.3",
         "eslint-plugin-import": "^2.13.0",
@@ -507,6 +511,7 @@ The list of depdendencies now looks like this:
 -   ~~eslint-plugin-flowtype~~
 -   ~~eslint-plugin-prettier~~
 -   ~~eslint-config-prettier~~
+-   `eslint-import-resolver-webpack`
 -   ~~flow-bin~~
 -   `react`
 -   `react-dom`
@@ -631,6 +636,7 @@ Open up a browser and go to `localhost:8080` and you'll see the React App's "Hel
 
 Now the following dependencies have been implemented:
 
+-   `eslint-import-resolver-webpack`
 -   `@storybook/react`
 -   `@storybook/addons`
 -   `@storybook/addon-knobs`
@@ -645,34 +651,173 @@ Now the following dependencies have been implemented:
 -   `styled-components`
 -   `axios`
 
-##
+## Project Folder Setup and Atomic Design
 
-Before I set up
+**Directory Structure**
+
+Before setting up React-router, I'm going to go ahead and set up the folder structure for the atomic design boilerplate right now so that we can use React Router to route between two pages.
+
+```
+$ mkdir -p src/components/atoms src/components/molecules src/components/organisms src/components/templates/Home src/components/templates/Away && touch src/components/atoms/.placeholder src/components/molecules/.placeholder src/components/organisms/.placeholder src/components/templates/Home/index.jsx src/components/templates/Away/index.jsx
+```
+
+Now the directory structure should look something like this:
+
+```
+boilerplate/
+├── .vscode/
+├── build/
+├── src/
+│   ├── components/
+│   │   ├── atoms/
+│   │   │   └── .placeholder
+│   │   ├── molecules/
+│   │   │   └── .placeholder
+│   │   ├── organisms/
+│   │   │   └── .placeholder
+│   │   └── templates/
+│   │       ├── Home/
+│   │       │   └── index.jsx
+│   │       └── Away/
+│   │           └── index.jsx
+│   ├── App.jsx
+│   └── Index.html
+├── .babelrc
+├── .eslintignore
+├── .eslintrc
+├── .flowconfig
+├── .gitignore
+├── .prettierrc
+├── package.json
+├── webpack.config.js
+└── yarn.lock
+```
+
+Super simple. Read more about atomic design on google or here http://bradfrost.com/blog/post/atomic-web-design/ and http://atomicdesign.bradfrost.com/chapter-1/ but basically it's just a way to organize components in a way that encourages reusability and I think it'll lend itself well to React. The `.placeholder` files are to keep the directories tracked with git.
+
+With that done, a basic react-router setup using BrowserRouter can be added to App.jsx. There will be two pages in this boilerplate project: `Home` and `Away`. Each has a folder under `templates` in components as they represent remplates for react to render into the DOM as pages with prop data populated by Redux. The other folders `atoms`, `molecules`, and `organisms` are best populated subjectively trying to follow the principals outlined in the above link.
+
+**TL;DR:** If it can be expressed in one or very few html tags it is likely an atom. If it cannot, it likely can be split up into multiple atoms. The example the write-up gives is this:
+
+Label, Button, Input: atoms
+Login form combining the three: molecule
+Header component with login form and links for nav: organism
+Page that displays all content including the header: template
+Page populated with data and rendered: page
+
+It'll make more sense when Redux is added and components need to be added to display the store data.
+
+**Import Aliases**
+
+Setting up and maintaining good import aliases is a good idea! Struggling with relative import paths is a stupid don't do it just do this and maintain it; it's worth it I promise.
+
+Instead of having to import the `Away` component as `../../components/templates/Away` or some other stupid nonsense depending on file location, I'm going to set up import aliases in `webpack` and `flow`, and help `ESlint` understand webpack's aliases to not report errors.
+
+Open up `webpack.config.js` and replace the `paths` and `resolve` objects with this:
+
+```javascript
+const paths = {
+    build: path.resolve(__dirname, "build"),
+    src: path.resolve(__dirname, "src"),
+    components: path.resolve(__dirname, "src/components")
+};
+
+. . .
+
+resolve: {
+    alias: {
+        Atoms: path.resolve(paths.components, "atoms/"),
+        Molecules: path.resolve(paths.components, "molecules/"),
+        Organisms: path.resolve(paths.components, "organisms/"),
+        Templates: path.resolve(paths.components, "templates/")
+    },
+    extensions: [".js", ".jsx"]
+}
+```
+
+This will set up an alias for each component path. Now you can import `Away` like this:
+
+```javascript
+import Away from "Templates/Away";
+```
+
+No matter what file you are trying to import into, you can just use the same import code. I cannot stress enough **how useful it is to not have to waste brainpower on figuring out relative import paths**.
+
+Now that webpack is aliasing those import paths, `flow` and `ESlint` need to be able to understand the aliases so they don't report errors in importing nonexistent code.
+
+Open `.eslintrc` and replace the contents with this:
+
+```json
+{
+    "extends": ["airbnb", "prettier"],
+    "plugins": ["flowtype", "prettier"],
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true
+    },
+    "rules": {
+        "no-console": "off",
+        "prettier/prettier": "off",
+        "react/jsx-indent": "off",
+        "react/jsx-one-expression-per-line": "off"
+    },
+    "settings": {
+        "import/resolver": "webpack"
+    }
+}
+```
+
+The `settings` object was added, setting the import resolver to webpack defaults. This works because of the `eslint-import-resolver-webpack` package added at the beginning step. (read more about eslint import resolvers here: https://github.com/benmosher/eslint-plugin-import#resolvers)
+
+Finally, open `.flowconfig` and replace the contents with this:
+
+```
+[ignore]
+./build/.*
+
+[options]
+module.name_mapper='^Atoms\(\/?.*\)$' -> '<PROJECT_ROOT>/src/components/atoms/\1'
+module.name_mapper='^Molecules\(\/?.*\)$' -> '<PROJECT_ROOT>/src/components/molecules/\1'
+module.name_mapper='^Organisms\(\/?.*\)$' -> '<PROJECT_ROOT>/src/components/organisms/\1'
+module.name_mapper='^Templates\(\/?.*\)$' -> '<PROJECT_ROOT>/src/components/templates/\1'
+```
+
+It looks like a hot mess, I know. But it's not that complicated: `module.name_mapper=` sets a regular expression string to an alias of another string -- in this case, these four options lines are mirroring what was added in `webpack.config.js`.
+
+Whenever you want to create a new alias (for example, when we add `API`s or `Assets`), you will have to add it in **both** webpack _and_ flowconfig. Yeah it's kind of a pain in the ass, but it's still so much better than not setting up aliasing.
+
+And that's it for the project structure for now!
+
+## Back to React Router...
 
 ## Setting up Redux
 
 Not going to explain a ton about what Redux is because you can just go read about it if you don't know, just going to set it up here. It's basically a global immutable state for the app. How redux is implemented is subject to personal opinion to some extent, but for this boilerplate I'm going to try and use redux for all state in the app, leaving most if not all React components as functional components with locally scoped redux store state data. If you don't like the approach, try something else I'm not your mom I'm not in charge of you.
 
----
+# <a name="5"></a> Further Reading
 
-// Further Reading
+**Good Articles**
 
-https://github.com/webpack/webpack/issues/5718 airbnb webpack optimizations
+-   https://github.com/webpack/webpack/issues/5718 airbnb webpack optimizations
 
-http://bradfrost.com/blog/post/atomic-web-design/ Atomic web design
+-   http://atomicdesign.bradfrost.com/chapter-1/ Atomic web design
 
-https://philipwalton.github.io/solved-by-flexbox/demos/holy-grail/ Solved by Flexbox - flexbox solutions to layout problems
+-   https://philipwalton.github.io/solved-by-flexbox/demos/holy-grail/ Solved by Flexbox - flexbox solutions to layout problems
 
-https://developers.redhat.com/blog/2017/11/15/best-practices-react-redux-web-application-development/ Suggestions for redux best practices
+-   https://developers.redhat.com/blog/2017/11/15/best-practices-react-redux-web-application-development/ Suggestions for redux best practices
 
-https://www.thegreatcodeadventure.com/building-a-simple-crud-app-with-react-redux-part-1/ - What it says
+-   https://www.thegreatcodeadventure.com/building-a-simple-crud-app-with-react-redux-part-1/ - What it says
 
-https://github.com/markerikson/react-redux-links/blob/master/react-architecture.md - React Architecture best practices
+-   https://github.com/markerikson/react-redux-links/blob/master/react-architecture.md - React Architecture best practices
 
-// Docs
+**Docs**
 
-https://github.com/juliangarnier/anime AnimeJs Docs
+-   https://github.com/juliangarnier/anime AnimeJs Docs
 
-https://redux.js.org/basics Redux docs
+-   https://redux.js.org/basics Redux docs
 
-https://www.styled-components.com/docs/basics#installation Styled Components docs
+-   https://www.styled-components.com/docs/basics#installation Styled Components docs
+
+-   https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/guides/basic-components.md Basics of react router's browserrouter, etc.
+
+-   https://github.com/flowtype/flow-typed How to use flow-typed to set up flow typings for third party libraries.

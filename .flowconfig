@@ -1,2 +1,8 @@
 [ignore]
 ./build/.*
+
+[options]
+module.name_mapper='^Atoms\(\/?.*\)$' -> '<PROJECT_ROOT>/src/components/atoms/\1'
+module.name_mapper='^Molecules\(\/?.*\)$' -> '<PROJECT_ROOT>/src/components/molecules/\1'
+module.name_mapper='^Organisms\(\/?.*\)$' -> '<PROJECT_ROOT>/src/components/organisms/\1'
+module.name_mapper='^Templates\(\/?.*\)$' -> '<PROJECT_ROOT>/src/components/templates/\1'
