@@ -2,7 +2,9 @@
 
 I made this for myself because I'm an idiot and need to walk through modern web development with React step by step in order to understand what even the fuck is going on.
 
-This project represents a solid boilerplate for a modern React/Redux web project. It will contain mistakes. Fix them? =)
+This README represents my process in setting up this boilerplate project. It is meant as a guide to understanding the guts because javascript shouldn't be rocket science, but it may need more TLC to be "production-ready".
+
+PS use golang with gorilla/mux for the backend don't use node don't be that guy/gal that only knows JS. Although ORM solutions for Go leave a lot to be desired last I checked..
 
 The following guide will walk through creating the boilerplate project from an empty project. Reading through it will explain these handy skills:
 
@@ -10,10 +12,12 @@ The following guide will walk through creating the boilerplate project from an e
 -   How to add the dependencies and configure them correctly
 -   What the hell webpack is even doing how do you set that guy up
 -   How to set up a basic "atomic design" pattern for the app
+-   Using scripts to build, bundle, and serve the app in a test environment
+
+After the boilerplate is set up I'll also demonstrate how to use the packages installed:
+
 -   Using Storybook to easily develop and test changes to atomic UI components visually
 -   Creating a VERY basic web app with React, Redux, and React-Router, using Styled Components for styling and Axios for rest calls. And Animejs for juice.
--   Using scripts to build, bundle, and serve the app in a test environment
--   How to ignore this entire README and just clone the repo to make websites because who cares
 
 The Boilerplate project has the following uncovered topics as TO-DOs:
 
@@ -21,6 +25,7 @@ The Boilerplate project has the following uncovered topics as TO-DOs:
 -   Testing using `jest`
 -   `flow-typed` to get third party flow typings
 -   webpack build optimizations
+-   Setting up decent react error boundary components and error tracking with Sentry.
 
 I use yarn. You can use npm instead. It's the same crap who cares.
 
@@ -647,23 +652,6 @@ $ yarn build && yarn start-dev
 You shouldn't see any errors, just lots of green success messages. Feels good, man.
 Open up a browser and go to `localhost:8080` and you'll see the React App's "Hello World" message showing on-screen.
 
-Now the following dependencies have been implemented:
-
--   `eslint-import-resolver-webpack`
--   `@storybook/react`
--   `@storybook/addons`
--   `@storybook/addon-knobs`
--   ~~react~~
--   ~~react-dom~~
--   `react-router-dom`
--   `redux`
--   `react-redux`
--   `redux-thunk`
--   `redux-logger`
--   `animejs`
--   `styled-components`
--   `axios`
-
 ## Project Folder Setup and Atomic Design
 
 **Directory Structure**
@@ -954,9 +942,47 @@ Open a browser to `localhost:8080` and you'll see the message `I'm home!` with a
 
 That's it! That's react-router! ...ish. See further reading to learn how to use it.
 
+In fact, at this point **The boilerplate project is basically set up** (except for webpack optimizations, third-party flow typing via `flow-typed`, and jest-based testing) . From here on out I'll be demonstrating basic usage for the packages installed.
+
+Here's what's been implemented so far:
+
+-   ~~webpack~~
+-   ~~webpack-dev-server~~
+-   ~~html-webpack-plugin~~
+-   ~~file-loader~~
+-   ~~babel-core~~
+-   ~~babel-loader~~
+-   ~~babel-runtime~~
+-   ~~babel-preset-env~~
+-   ~~babel-preset-react~~
+-   ~~babel-eslint~~
+-   ~~babel-polyfill~~
+-   `@storybook/react`
+-   `@storybook/addons`
+-   `@storybook/addon-knobs`
+-   ~~eslint~~
+-   ~~eslint-loader~~
+-   ~~eslint-config-airbnb~~
+-   ~~prettier~~
+-   ~~eslint-plugin-flowtype~~
+-   ~~eslint-plugin-prettier~~
+-   ~~eslint-config-prettier~~
+-   ~~eslint-import-resolver-webpack~~
+-   ~~flow-bin~~
+-   ~~react~~
+-   ~~react-dom~~
+-   ~~react-router-dom~~
+-   `redux`
+-   `react-redux`
+-   `redux-thunk`
+-   `redux-logger`
+-   `animejs`
+-   `styled-components`
+-   `axios`
+
 ## Setting up Redux
 
-Not going to explain a ton about what Redux is because you can just go read about it if you don't know, just going to set it up here. It's basically a global immutable state for the app. How redux is implemented is subject to personal opinion to some extent, but for this boilerplate I'm going to try and use redux for all state in the app, leaving most if not all React components as functional components with locally scoped redux store state data. If you don't like the approach, try something else I'm not your mom I'm not in charge of you.
+// TODO: Checkpoint here.
 
 # <a name="5"></a> Further Reading
 
