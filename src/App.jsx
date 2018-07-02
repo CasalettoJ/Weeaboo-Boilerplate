@@ -14,7 +14,7 @@ import Home from "Templates/Home";
 import Away from "Templates/Away";
 
 function App() {
-    const HomeComponent = () => <Home message="I'm away!" />;
+    const HomeComponent = () => <Home message="I'm home!" />;
     const AwayComponent = () => <Away message="I'm away!" />;
     return (
         <BrowserRouter>
