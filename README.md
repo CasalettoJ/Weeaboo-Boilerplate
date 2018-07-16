@@ -13,13 +13,6 @@ The following guide will walk through creating the boilerplate project from an e
 -   What the hell webpack is even doing how do you set that guy up
 -   How to set up a basic "atomic design" pattern for the app
 -   Using scripts to build, bundle, and serve the app in a test environment
--   Setting up the following for styled-components and modern js eslint syntax:
-```
-babel-plugin-transform-class-properties -- autobinding arrow functions in react components
-babel-plugin-transform-object-rest-spread -- {a,b,...c} destructor syntax
-css-loader & style-loader & normalize.css -- normlize and styled-components loading
-favicons-webpack-plugin -- For easy favicon generation and packing
-```
 
 After the boilerplate is set up I'll also demonstrate how to use the packages installed:
 
@@ -33,6 +26,13 @@ The Boilerplate project has the following uncovered topics as TO-DOs:
 -   `flow-typed` to get third party flow typings
 -   webpack build optimizations
 -   Setting up decent react error boundary components and error tracking with Sentry.
+-   Setting up the following for styled-components and modern js eslint syntax:
+```
+babel-plugin-transform-class-properties -- autobinding arrow functions in react components
+babel-plugin-transform-object-rest-spread -- {a,b,...c} destructor syntax
+css-loader & style-loader & normalize.css -- normlize and styled-components loading
+favicons-webpack-plugin -- For easy favicon generation and packing
+```
 
 I use yarn. You can use npm instead. It's the same crap who cares.
 
