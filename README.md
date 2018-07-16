@@ -32,6 +32,7 @@ babel-plugin-transform-class-properties -- autobinding arrow functions in react 
 babel-plugin-transform-object-rest-spread -- {a,b,...c} destructor syntax
 css-loader & style-loader & normalize.css -- normlize and styled-components loading
 favicons-webpack-plugin -- For easy favicon generation and packing
+styled-tools -- Useful interpolation functions for styled-components
 ```
 
 I use yarn. You can use npm instead. It's the same crap who cares.
