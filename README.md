@@ -33,6 +33,7 @@ babel-plugin-transform-object-rest-spread -- {a,b,...c} destructor syntax
 css-loader & style-loader & normalize.css -- normlize and styled-components loading
 favicons-webpack-plugin -- For easy favicon generation and packing
 styled-tools -- Useful interpolation functions for styled-components
+polished -- Useful sass-like functions for styled-components styles
 ```
 
 I use yarn. You can use npm instead. It's the same crap who cares.
