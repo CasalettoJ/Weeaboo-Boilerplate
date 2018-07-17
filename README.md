@@ -34,6 +34,7 @@ css-loader & style-loader & normalize.css -- normlize and styled-components load
 favicons-webpack-plugin -- For easy favicon generation and packing
 styled-tools -- Useful interpolation functions for styled-components
 polished -- Useful sass-like functions for styled-components styles
+react-transition-group -- used with anime.js to create animated transitions for components
 ```
 
 I use yarn. You can use npm instead. It's the same crap who cares.
